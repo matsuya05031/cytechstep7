@@ -10,7 +10,7 @@ use App\Models\Campany;
  */
 class ProductFactory extends Factory
 {
-    protected $model = product::class;
+    protected $model = Product::class;
     /**
      * Define the model's default state.
      *
@@ -19,9 +19,12 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'company_id' => $this->faker->company,
-            'street_address' => $this->faker->streetAddress,
-            'representative_name' => $this->faker->name,
+            'company_id' => Company::factory(),
+            'product_name' => $this->faker->word,
+            'price' => $this->faker->numberBetween(100,1000),
+            'stock' => $this->faker->randomDigit,
+            'comment' => $this->faker->sentence,
+            'img_path' => 'https://picsum.photos/200/300',
         ];
     }
 }

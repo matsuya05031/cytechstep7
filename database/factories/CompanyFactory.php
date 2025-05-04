@@ -14,10 +14,12 @@ class CompanyFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'company_name' => $this->faker->company,
+            'street_address' => $this->faker->streetAddress,
+            'representative_name' => $this->faker->name,
         ];
     }
 }
