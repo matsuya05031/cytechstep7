@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Product;
-use App\Models\Campany;
+use App\Models\Company;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
  */
@@ -21,7 +21,7 @@ class ProductFactory extends Factory
         return [
             'company_id' => Company::factory(),
             'product_name' => $this->faker->word,
-            'price' => $this->faker->numberBetween(100,1000),
+            'price' => $this->faker->numberBetween(100, 999),
             'stock' => $this->faker->randomDigit,
             'comment' => $this->faker->sentence,
             'img_path' => 'https://picsum.photos/200/300',
