@@ -62,7 +62,7 @@ class ProductController extends Controller
         }
 
         $product->save();
-        return redirect('products');
+        return redirect()->route('products.create')->with('status', '商品を登録しました！');
     }
 
     /**
