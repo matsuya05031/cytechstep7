@@ -73,6 +73,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $product->load('company');
+
         return view('products.show', ['product'=> $product]);
     }
 
@@ -108,8 +110,8 @@ class ProductController extends Controller
         $product->stock = $request->stock;
 
         $product->save();
-        return redirect()->route('products.index')
-        ->with('success', 'Product updated successfully');
+        return redirect()->route('products.edit', $product->id)
+        ->with('success', '商品情報を更新しました！');
     }
 
     /**
