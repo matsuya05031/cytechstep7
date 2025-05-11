@@ -103,11 +103,16 @@ class ProductController extends Controller
             'product_name' => 'required',
             'price' => 'required',
             'stock' => 'required',
+            'comment' => 'nullable|string|max:255',
+            'img_path' => 'nullable|image|max:2048',
         ]);
 
         $product->product_name = $request->product_name;
         $product->price = $request->price;
         $product->stock = $request->stock;
+        $product->comment = $request->comment;
+        $product->img_path = $product->img_path;
+
 
         $product->save();
         return redirect()->route('products.edit', $product->id)

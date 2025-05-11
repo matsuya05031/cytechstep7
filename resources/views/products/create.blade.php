@@ -38,12 +38,12 @@
 
         <div class="mb-3">
             <label for="comment" class="form-label">コメント:</label>
-            <textarea id="comment" name="comment" class="form-control" rows="3" required></textarea>
+            <textarea id="comment" name="comment" class="form-control" rows="3"></textarea>
         </div>
 
         <div class="mb-3">
             <label for="img_path" class="form-label">商品画像:</label>
-            <input id="img_path" type="file" name="img_path" class="form-control" required>
+            <input id="img_path" type="file" name="img_path" class="form-control">
         </div>
 
         <button type="submit" class="btn btn-primary">登録</button>
