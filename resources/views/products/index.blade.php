@@ -10,6 +10,42 @@
 
     <div class="products mt-5">
         <h2>商品情報</h2>
+        <form action="{{ route('products.index') }}" method="GET" class="mb-4">
+            <input type="text" name="product_name" placeholder="商品名を入力” value="{{ request('product_name') }}">"
+
+            <select name="company_id">
+                <option value="">-- 企業名で絞り込み --</option>
+                @foreach($companies as $company)
+                    <option value="{{ $company->id }}" {{ request('company_id') == $company->id ? 'selected' : '' }}>
+                        {{ $company->company_name }}
+                    </option>
+                @endforeach
+            </select>
+
+            <button type="submit">検索</button>
+        </form>
+
+        <form action="{{ route('products.index') }}" method="get" class="mb-4">
+            <div>
+                <lavel>商品名</lavel>
+                <input type="text" name="product_name" value="{{ request('product_name') }}">
+            </div>
+            <div>
+                <lavel>メーカー</lavel>
+                <select name="company_id">
+                    <option value="">-- 選択してください --</option>
+                    @foreach ($companies as $company)
+                        <option value="{{ $company->id }}" {{ request('company_id') ==$company->id ? 'selected' : ''}}>
+                            {{ $company->company_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <button type="submit">検索</button>
+            </div>
+        </form>
         <table class="table table-striped">
             <thead>
                 <tr>

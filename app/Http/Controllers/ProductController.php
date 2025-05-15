@@ -13,10 +13,21 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return view('products.index', compact('products'));
+        $query = Product::query();
+        if($request->filled('product_name')) {
+           $query->where('product_name', 'like', '%' .$request->product_name . '%');
+        }
+
+        if($request->filled('company_id')) {
+           $query->where('company_id', $request->company_id);
+        }
+
+        $products = $query->with('company')->get();
+        $companies = Company::all();
+
+        return view('products.index', compact('products', 'companies'));
     }
 
     /**
