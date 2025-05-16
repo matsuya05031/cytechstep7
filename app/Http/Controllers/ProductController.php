@@ -60,22 +60,27 @@ class ProductController extends Controller
             'img_path' => 'nullable|image|max:2048',
         ]);
 
-        $product = new Product([
-            'product_name' => $request->get('product_name'),
-            'company_id' => $request->get('company_id'),
-            'price' => $request->get('price'),
-            'stock' => $request->get('stock'),
-            'comment' => $request->get('comment'),
-        ]);
-
-        if($request->hasFile('img_path')){
-            $filename = $request->img_path->getClientOriginalName();
-            $filePath = $request->img_path->storeAs('products',$filename,'public');
-            $product->img_path = '/storage/' . $filePath;
+        try {
+            $product = new Product([
+                'product_name' => $request->get('product_name'),
+                'company_id' => $request->get('company_id'),
+                'price' => $request->get('price'),
+                'stock' => $request->get('stock'),
+                'comment' => $request->get('comment'),
+            ]);
+            
+            if($request->hasFile('img_path')){
+                $filename = $request->img_path->getClientOriginalName();
+                $filePath = $request->img_path->storeAs('products',$filename,'public');
+                $product->img_path = '/storage/' . $filePath;
+            }
+            
+            $product->save();
+            return redirect()->route('products.create')->with('status', '商品を登録しました！');
+        
+        } catch (\Exception $e) {
+            return back()->withErrors('登録中にエラーがはっせいしました：' . $e->getMessage());
         }
-
-        $product->save();
-        return redirect()->route('products.create')->with('status', '商品を登録しました！');
     }
 
     /**
@@ -121,24 +126,29 @@ class ProductController extends Controller
             'img_path' => 'nullable|image|max:2048',
         ]);
 
-        if ($request->hasFile('img_path')) {
-            if ($product->img_path && File::exists(public_path($product->img_path))) {
-                File::delete(public_path($product->img_path));
+        try {
+            if ($request->hasFile('img_path')) {
+                if ($product->img_path && File::exists(public_path($product->img_path))) {
+                    File::delete(public_path($product->img_path));
+                }
+                
+                $path = $request->file('img_path')->store('images', 'public');
+                $product->img_path = 'storage/' . $path;
             }
+            
+            $product->product_name = $request->product_name;
+            $product->company_id = $request->company_id;
+            $product->price = $request->price;
+            $product->stock = $request->stock;
+            $product->comment = $request->comment;
+            
+            $product->save();
+            
+            return redirect()->route('products.index')->with('success', '商品情報を更新しました！');
 
-            $path = $request->file('img_path')->store('images', 'public');
-            $product->img_path = 'storage/' . $path;
+        } catch (\Exception $e) {
+            return back()->withErrors('更新中にエラーが発生しました :' . $e->getMessage());
         }
-
-        $product->product_name = $request->product_name;
-        $product->company_id = $request->company_id;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-        $product->comment = $request->comment;
-
-
-        $product->save();
-        return redirect()->route('products.index')->with('success', '商品情報を更新しました！');
     }
 
     /**
@@ -147,9 +157,13 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(product $product)
+    public function destroy(Product $product)
     {
-        $product->delete();
-        return redirect('/products');
+        try {
+            $product->delete();
+            return redirect()->route('products.index')->with('success', '商品を削除しました');
+        } catch (\Exception $e) {
+            return back()->withErrors('削除中にエラーが発生しました :' . $e->getMessage());
+        }
     }
 }
