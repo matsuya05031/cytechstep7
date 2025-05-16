@@ -135,7 +135,6 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->comment = $request->comment;
-        $product->img_path = $product->img_path;
 
 
         $product->save();
