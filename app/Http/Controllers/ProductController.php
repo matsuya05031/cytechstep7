@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+
 
 class ProductController extends Controller
 {
@@ -108,17 +110,28 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, product $product)
+    public function update(Request $request, Product $product)
     {
         $request->validate([
-            'product_name' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
-            'comment' => 'nullable|string|max:255',
+            'product_name' => 'required|string|max:255',
+            'company_id' => 'required|exists:companies,id',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'comment' => 'nullable|string',
             'img_path' => 'nullable|image|max:2048',
         ]);
 
+        if ($request->hasFile('img_path')) {
+            if ($product->img_path && File::exists(public_path($product->img_path))) {
+                File::delete(public_path($product->img_path));
+            }
+
+            $path = $request->file('img_path')->store('images', 'public');
+            $product->img_path = 'storage/' . $path;
+        }
+
         $product->product_name = $request->product_name;
+        $product->company_id = $request->company_id;
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->comment = $request->comment;
@@ -126,8 +139,7 @@ class ProductController extends Controller
 
 
         $product->save();
-        return redirect()->route('products.edit', $product->id)
-        ->with('success', '商品情報を更新しました！');
+        return redirect()->route('products.index')->with('success', '商品情報を更新しました！');
     }
 
     /**
