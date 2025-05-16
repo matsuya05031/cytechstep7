@@ -6,6 +6,16 @@
 
     <a href="{{ route('products.index') }}" class="btn btn-primary mb-3">商品一覧に戻る</a>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
 
         @csrf
