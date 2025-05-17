@@ -16,6 +16,10 @@
                             <div class="mb-3">
                                 <label for="product_name" class="form-label">商品名</label>
                                 <input type="text" class="form-control" id="product_name" name="product_name" value="{{ $product->product_name }}" required>
+
+                                @error('product_name')
+                                    <div class="text-danger">{{ '正しい商品名を入力してください' }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
@@ -25,27 +29,46 @@
                                         <option value="{{ $company->id }}" {{ $product->company_id == $company->id ? 'selected' : '' }}>{{ $company->company_name }}</option>
                                     @endforeach
                                 </select>
+                                @error('company_id')
+                                    <div class="text-danger">{{ '正しい会社を選択してください' }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="price" class="form-label">金額</label>
                                 <input type="number" class="form-control" id="price" name="price" value="{{ $product->price }}" required>
+
+                                @error('price')
+                                    <div class="text-danger">{{ '正しい価格を入力してください' }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="stock" class="form-label">在庫数</label>
                                 <input type="number" class="form-control" id="stock" name="stock" value="{{ $product->stock }}" required>
+
+                                @error('stock')
+                                    <div class="text-danger">{{ '正しい在庫数を入力してください' }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="comment" class="form-label">コメント</label>
                                 <textarea id="comment" name="comment" class="form-control" rows="3">{{ $product->comment }}</textarea>
+
+                                @error('comment')
+                                    <div class="text-danger">{{ '正しいコメントを入力してください' }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="img_path" class="form-label">商品画像:</label>
                                 <input id="img_path" type="file" name="img_path" class="form-control">
                                 <img src="{{ asset($product->img_path) }}" alt="商品画像" class="product-image">
+
+                                @error('img_path')
+                                    <div class="text-danger">{{ '正しい画像を選択してください' }}</div>
+                                @enderror
                             </div>
 
                             <button type="submit" class="btn btn-primary">変更内容で更新する</button>

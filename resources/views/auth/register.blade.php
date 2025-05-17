@@ -19,7 +19,7 @@
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>{{ '正しい名前を入力してください' }}</strong>
                                     </span>
                                 @enderror
                             </div>
@@ -33,7 +33,7 @@
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>{{ '正しいメールアドレスを入力してください' }}</strong>
                                     </span>
                                 @enderror
                             </div>
@@ -47,7 +47,7 @@
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>{{ '正しいパスワードを入力してください' }}</strong>
                                     </span>
                                 @enderror
                             </div>
