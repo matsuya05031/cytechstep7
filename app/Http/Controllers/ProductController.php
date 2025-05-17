@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use App\Http\Requests\ProductRequest;
 
 
 class ProductController extends Controller
@@ -49,29 +50,16 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'product_name' => 'required',
-            'company_id' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
-            'comment' => 'nullable',
-            'img_path' => 'nullable|image|max:2048',
-        ]);
-
         try {
-            $product = new Product([
-                'product_name' => $request->get('product_name'),
-                'company_id' => $request->get('company_id'),
-                'price' => $request->get('price'),
-                'stock' => $request->get('stock'),
-                'comment' => $request->get('comment'),
-            ]);
+            $product = new Product($request->onry([
+                'product_name', 'company_id', 'price', 'stock', 'comment'
+            ]));
             
-            if($request->hasFile('img_path')){
+            if($request->hasFile('img_path')) {
                 $filename = $request->img_path->getClientOriginalName();
-                $filePath = $request->img_path->storeAs('products',$filename,'public');
+                $filePath = $request->img_path->storeAs('products', $filename, 'public');
                 $product->img_path = '/storage/' . $filePath;
             }
             
@@ -79,7 +67,7 @@ class ProductController extends Controller
             return redirect()->route('products.create')->with('status', '商品を登録しました！');
         
         } catch (\Exception $e) {
-            return back()->withErrors('登録中にエラーがはっせいしました：' . $e->getMessage());
+            return back()->withErrors('登録中にエラーが発生しました：' . $e->getMessage());
         }
     }
 
@@ -115,17 +103,8 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        $request->validate([
-            'product_name' => 'required|string|max:255',
-            'company_id' => 'required|exists:companies,id',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'comment' => 'nullable|string',
-            'img_path' => 'nullable|image|max:2048',
-        ]);
-
         try {
             if ($request->hasFile('img_path')) {
                 if ($product->img_path && File::exists(public_path($product->img_path))) {
@@ -136,11 +115,9 @@ class ProductController extends Controller
                 $product->img_path = 'storage/' . $path;
             }
             
-            $product->product_name = $request->product_name;
-            $product->company_id = $request->company_id;
-            $product->price = $request->price;
-            $product->stock = $request->stock;
-            $product->comment = $request->comment;
+            $product->fill($request->only([
+                'product_name', 'company_id', 'price', 'stock', 'comment'
+            ]));
             
             $product->save();
             
