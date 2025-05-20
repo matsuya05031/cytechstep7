@@ -17,7 +17,7 @@
             <input id="product_name" type="text" name="product_name" class="form-control" required>
 
             @error('product_name')
-                <div class="text-danger">{{ '正しい商品名を入力してください'}}</div>
+                <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
@@ -30,7 +30,7 @@
             </select>
 
             @error('company_id')
-                <div class="text-danger">{{ '正しい会社を選択してください' }}</div>
+                <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
@@ -39,7 +39,7 @@
             <input id="price" type="text" name="price" class="form-control" required>
 
             @error('price')
-                <div class="text-danger">{{ '正しい価格を入力してください' }}</div>
+                <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
@@ -48,7 +48,7 @@
             <input id="stock" type="text" name="stock" class="form-control" required>
 
             @error('stock')
-                <div class="text-danger">{{ '正しい在庫数を入力してください' }}</div>
+                <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
@@ -57,7 +57,7 @@
             <textarea id="comment" name="comment" class="form-control" rows="3"></textarea>
 
             @error('comment')
-                <div class="text-danger">{{ '正しいコメントを入力してください' }}</div>
+                <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
@@ -66,7 +66,7 @@
             <input id="img_path" type="file" name="img_path" class="form-control">
 
             @error('img_path')
-                <div class="text-danger">{{ '正しい画像を選択してください' }}</div>
+                <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 

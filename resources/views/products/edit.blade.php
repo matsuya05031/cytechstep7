@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <a href="{{ route('products.index') }}" class="btn btn-primary mt-1 mb-3">商品一覧画面に戻る</a>
+                <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary mt-1 mb-3">商品情報詳細画面に戻る</a>
                 <div class="card">
                     <div class="card-header"><h2>商品情報を変更する</h2></div>
 
@@ -18,7 +18,7 @@
                                 <input type="text" class="form-control" id="product_name" name="product_name" value="{{ $product->product_name }}" required>
 
                                 @error('product_name')
-                                    <div class="text-danger">{{ '正しい商品名を入力してください' }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -30,7 +30,7 @@
                                     @endforeach
                                 </select>
                                 @error('company_id')
-                                    <div class="text-danger">{{ '正しい会社を選択してください' }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -39,7 +39,7 @@
                                 <input type="number" class="form-control" id="price" name="price" value="{{ $product->price }}" required>
 
                                 @error('price')
-                                    <div class="text-danger">{{ '正しい価格を入力してください' }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -48,7 +48,7 @@
                                 <input type="number" class="form-control" id="stock" name="stock" value="{{ $product->stock }}" required>
 
                                 @error('stock')
-                                    <div class="text-danger">{{ '正しい在庫数を入力してください' }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -57,7 +57,7 @@
                                 <textarea id="comment" name="comment" class="form-control" rows="3">{{ $product->comment }}</textarea>
 
                                 @error('comment')
-                                    <div class="text-danger">{{ '正しいコメントを入力してください' }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -67,7 +67,7 @@
                                 <img src="{{ asset($product->img_path) }}" alt="商品画像" class="product-image">
 
                                 @error('img_path')
-                                    <div class="text-danger">{{ '正しい画像を選択してください' }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 

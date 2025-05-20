@@ -53,7 +53,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         try {
-            $product = new Product($request->onry([
+            $product = new Product($request->only([
                 'product_name', 'company_id', 'price', 'stock', 'comment'
             ]));
             
@@ -121,7 +121,7 @@ class ProductController extends Controller
             
             $product->save();
             
-            return redirect()->route('products.index')->with('success', '商品情報を更新しました！');
+            return redirect()->route('products.edit', $product->id)->with('success', '商品情報を更新しました！');
 
         } catch (\Exception $e) {
             return back()->withErrors('更新中にエラーが発生しました :' . $e->getMessage());
