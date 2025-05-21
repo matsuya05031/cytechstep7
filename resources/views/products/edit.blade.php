@@ -15,7 +15,7 @@
 
                             <div class="mb-3">
                                 <label for="product_name" class="form-label">商品名</label>
-                                <input type="text" class="form-control" id="product_name" name="product_name" value="{{ $product->product_name }}" required>
+                                <input type="text" class="form-control" id="product_name" name="product_name" value="{{ $product->product_name }}">
 
                                 @error('product_name')
                                     <div class="text-danger">{{ $message }}</div>
@@ -36,7 +36,7 @@
 
                             <div class="mb-3">
                                 <label for="price" class="form-label">金額</label>
-                                <input type="number" class="form-control" id="price" name="price" value="{{ $product->price }}" required>
+                                <input type="number" class="form-control" id="price" name="price" value="{{ $product->price }}">
 
                                 @error('price')
                                     <div class="text-danger">{{ $message }}</div>
@@ -45,7 +45,7 @@
 
                             <div class="mb-3">
                                 <label for="stock" class="form-label">在庫数</label>
-                                <input type="number" class="form-control" id="stock" name="stock" value="{{ $product->stock }}" required>
+                                <input type="number" class="form-control" id="stock" name="stock" value="{{ $product->stock }}">
 
                                 @error('stock')
                                     <div class="text-danger">{{ $message }}</div>
