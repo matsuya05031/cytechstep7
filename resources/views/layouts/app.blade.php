@@ -15,6 +15,32 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+    $('#purchase-button').on('click', function() {
+        const productId = $(this).data('product-id');
+        const quantity = 1;
+
+        $.ajax({
+            url: '/api/purchase',
+            type: 'POST',
+            data: {
+                product_id: productId,
+                quantity: quantity,
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(res) {
+                alert(res.message);
+            },
+            error: function (xhr) {
+                alert(xhr.responseJSON.message);
+            }
+        });
+    });
+    </script>
 </head>
 <body>
     <div id="app">
