@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained();
+            $table->integer('quantity');
+            $table->integer('price');
             $table->unsignedBigInteger('product_id');
             $table->timestamps();
 
