@@ -10,20 +10,27 @@
 
     <div class="products mt-5">
         <h2>商品情報</h2>
-        <form action="{{ route('products.index') }}" method="GET" class="mb-4">
-            <input type="text" name="product_name" placeholder="商品名を入力" value="{{ request('product_name') }}">
+        <form id="search-form">
+            <input type="text" name="product_name" placeholder="商品名">
+            <input tyoe="number" name="price_min" placeholder="価格下限">
+            <input type="number" name="price_max" placeholder="価格上限">
+            <input type="number" name="stock_min" placeholder="在庫下限">
+            <input type="number" name="stock_max" placeholder="在庫上限">
 
             <select name="company_id">
                 <option value="">-- 企業名で絞り込み --</option>
                 @foreach($companies as $company)
-                    <option value="{{ $company->id }}" {{ request('company_id') == $company->id ? 'selected' : '' }}>
-                        {{ $company->company_name }}
-                    </option>
+                    <option value="{{ $company->id }}">{{ $company->company_name }}</option>
                 @endforeach
             </select>
 
             <button type="submit">検索</button>
         </form>
+
+        <!-- 検索結果の表示 -->
+        <div id="product-list">
+            @include('products.partials.product_table', ['products' => $products])
+        </div>
 
         <table class="table table-striped">
             <thead>

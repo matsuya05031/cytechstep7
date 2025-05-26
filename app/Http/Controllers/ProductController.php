@@ -128,6 +128,38 @@ class ProductController extends Controller
         }
     }
 
+    public function search(Request $request)
+    {
+        $query = Product::query()->with('company');
+
+        if ($request->filled('product_name')) {
+            $query->where('product_name', 'like', '%' . $request->product_name . '%');
+        }
+
+        if ($request->filled('company_id')) {
+            $query->where('company_id', $request->company_id);
+        }
+
+        if ($request->filled('price_min')) {
+            $query->where('price', '>=', $request->price_min);
+        }
+
+        if ($request->filled('price_max')) {
+            $query->where('price', '<=', $request->price_max);
+        }
+
+        if ($request->filled('stock_min')) {
+            $query->where('stock', '>=', $request->stock_min);
+        }
+
+        if ($request->filled('stock_max')) {
+            $query->where('stock', '<=', $request->stock_max);
+        }
+
+        $products = $query->get();
+
+        return view('products.partials.product_table', compact('products'));
+    }
     /**
      * Remove the specified resource from storage.
      *
