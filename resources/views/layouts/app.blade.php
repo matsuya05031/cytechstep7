@@ -17,23 +17,6 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    
-    <script>
-    $('#search-form').on('submit', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{ route('products.search') }}",
-            type: "GET",
-            data: $(this).serialize(),
-            success: function (data) {
-                $('#product-list').html(data);
-            },
-            error: function () {
-                alert('検索に失敗しました');
-            }
-        });
-    });
 
     <script>
     $('#purchase-button').on('click', function() {
@@ -59,7 +42,7 @@
         });
     });
     </script>
-    
+
 </head>
 <body>
     <div id="app">

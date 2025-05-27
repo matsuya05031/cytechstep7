@@ -12,7 +12,7 @@
         <h2>商品情報</h2>
         <form id="search-form">
             <input type="text" name="product_name" placeholder="商品名">
-            <input tyoe="number" name="price_min" placeholder="価格下限">
+            <input type="number" name="price_min" placeholder="価格下限">
             <input type="number" name="price_max" placeholder="価格上限">
             <input type="number" name="stock_min" placeholder="在庫下限">
             <input type="number" name="stock_max" placeholder="在庫上限">
@@ -31,42 +31,27 @@
         <div id="product-list">
             @include('products.partials.product_table', ['products' => $products])
         </div>
+  
+        {{-- jQueryの処理 --}}
+        <script>
+        $(document).ready(function () {
+            $('#search-form').on('submit', function (e) {
+                e.preventDefault();
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>商品名</th>
-                    <th>メーカー</th>
-                    <th>価格</th>
-                    <th>在庫数</th>
-                    <th>コメント</th>
-                    <th>商品画像</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach ($products as $product)
-                <tr>
-                    <td>{{ $product->id }}</td>
-                    <td>{{ $product->product_name }}</td>
-                    <td>{{ $product->company->company_name }}</td>
-                    <td>{{ $product->price }}</td>
-                    <td>{{ $product->stock }}</td>
-                    <td>{{ $product->comment }}</td>
-                    <td><img src="{{ asset($product->img_path) }}" alt="商品画像" width="100"></td>
-                    <td>
-                        <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm mx-1">詳細表示</a>
-                        <form method="POST" action="{{ route('products.destroy', $product) }}" class="d-inline" onsubmit="return confirm('本当に削除しますか？');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm mx-1">削除</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+                $.ajax({
+                    url: "{{ route('products.search') }}",
+                    type: "GET",
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        $('#product-list').html(data);
+                    },
+                    error: function () {
+                        alert('検索に失敗しました');
+                    }
+                });
+            });
+        });
+        </script>
     </div>
 
     

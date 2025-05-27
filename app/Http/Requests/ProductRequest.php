@@ -26,8 +26,8 @@ class ProductRequest extends FormRequest
         return [
             'product_name' => 'required|string|max:255',
             'company_id' => 'required|exists:companies,id',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
             'comment' => 'nullable|string',
             'img_path' => 'nullable|image|max:2048',
         ];
@@ -45,9 +45,11 @@ class ProductRequest extends FormRequest
 
             'price.required' => '価格は必須です',
             'price.numeric' => '価格は数値で入力してください',
+            'price.min' => '価格は0円以上で入力してください',
 
             'stock.required' => '在庫数は必須です',
             'stock.integer' => '在庫数は整数で入力してください',
+            'stock.min' => '在庫数は0個以上で入力してください',
 
             'comment.string' => 'コメントは文字列で入力してください',
 

@@ -36,7 +36,7 @@
 
                             <div class="mb-3">
                                 <label for="price" class="form-label">金額</label>
-                                <input type="number" class="form-control" id="price" name="price" value="{{ $product->price }}">
+                                <input type="number" class="form-control" id="price" name="price" value="{{ $product->price }}" min="0">
 
                                 @error('price')
                                     <div class="text-danger">{{ $message }}</div>
@@ -45,7 +45,7 @@
 
                             <div class="mb-3">
                                 <label for="stock" class="form-label">在庫数</label>
-                                <input type="number" class="form-control" id="stock" name="stock" value="{{ $product->stock }}">
+                                <input type="number" class="form-control" id="stock" name="stock" value="{{ $product->stock }}" min="0">
 
                                 @error('stock')
                                     <div class="text-danger">{{ $message }}</div>
