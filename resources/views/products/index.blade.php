@@ -16,6 +16,8 @@
             <input type="number" name="price_max" placeholder="価格上限">
             <input type="number" name="stock_min" placeholder="在庫下限">
             <input type="number" name="stock_max" placeholder="在庫上限">
+            <input type="hidden" name="sort_column" id="sort_column" value="id">
+            <input type="hidden" name="sort_order" id="sort_order" value="desc">
 
             <select name="company_id">
                 <option value="">-- 企業名で絞り込み --</option>
@@ -52,8 +54,63 @@
             });
         });
         </script>
-    </div>
 
-    
+        <script>
+        $(document).ready(function () {
+            $(document).on('click', '.delete-btn', function () {
+                const productId = $(this).data('id');
+                if (!confirm('本当に削除しますか？')) return;
+                
+                $.ajax({
+                    url: '/products/' + productId,
+                    type: 'POST',
+                    data: {
+                        _method: 'DELETE',
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function () {
+                        $('#product-row-' + productId).fadeOut(300, function () {
+                            $(this).remove();
+                        });
+                        alert('商品を削除しました');
+                    },
+                    error: function () {
+                        alert('商品の削除に失敗しました');
+                    }
+                });
+            });
+        });
+        </script>
+
+        <script>
+        $(document).ready(function () {
+            $(document).on('click', '.sortable', function () {
+                const $header = $(this);
+                const column = $header.data('column');
+                const currentOrder = $header.data('order') || 'desc';
+                const nextOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+
+                 $('#sort_column').val(column);
+                 $('#sort_order').val(nextOrder);
+
+                console.log("ソートカラム: ", column, "現順: ", currentOrder, "次順: ", nextOrder);
+
+                $.ajax({
+                    url: "{{ route('products.search') }}",
+                    type: "GET",
+                    data: $('#search-form').serialize(),
+                    success: function (data) {
+                        $('#product-list').html(data);
+                        
+                        $(`.sortable[data-column="${column}"]`).data('order', nextOrder);
+                    },
+                    error: function () {
+                        alert('ソートに失敗しました');
+                    }
+                });
+            });
+        });
+        </script>
+    </div>
 </div>
 @endsection

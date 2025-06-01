@@ -18,6 +18,9 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        $products = Product::with('company')->orderBy('id', 'desc')->get();
+        $companies = Company::all();
+
         $query = Product::query();
         if ($request->filled('product_name')) {
            $query->where('product_name', 'like', '%' .$request->product_name . '%');
@@ -156,9 +159,17 @@ class ProductController extends Controller
             $query->where('stock', '<=', $request->stock_max);
         }
 
+        $sortColumn = $request->input('sort_column', 'id');
+        $sortOrder = $request->input('sort_order', 'desc');
+
+        $sortableColumns = ['id', 'product_name', 'price', 'stock'];
+        if (in_array($sortColumn, $sortableColumns)) {
+            $query->orderBy($sortColumn, $sortOrder);
+        }
+
         $products = $query->get();
 
-        return view('products.partials.product_table', compact('products'));
+        return view('products.partials.product_table', compact('products'))->render();
     }
     /**
      * Remove the specified resource from storage.
@@ -166,13 +177,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        try {
-            $product->delete();
-            return redirect()->route('products.index')->with('success', '商品を削除しました');
-        } catch (\Exception $e) {
-            return back()->withErrors('削除中にエラーが発生しました :' . $e->getMessage());
-        }
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return response()->json(['message' => '削除しました']);
     }
 }

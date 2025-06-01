@@ -18,6 +18,14 @@ class Product extends Model
         'img_path',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($product) {
+            $product->sales()->delete();
+        });
+    }
+
     public function sales()
     {
         return $this->hasMany(Sale::class);

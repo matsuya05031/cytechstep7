@@ -1,18 +1,33 @@
+@php
+    $currentSortColumn = request('sort_column', 'id');
+    $currentSortOrder = request('sort_order', 'desc');
+@endphp
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>商品名</th>
-            <th>価格</th>
-            <th>在庫</th>
-            <th>メーカー</th>
+            @php
+                function sortLink($label, $column, $currentSortColumn, $currentSortOrder) {
+                    $nextOrder = ($currentSortColumn === $column && $currentSortOrder === 'asc') ? 'desc' : 'asc';
+                    $arrow = '';
+                    if ($currentSortColumn === $column) {
+                        $arrow = $currentSortOrder === 'asc' ? '↑' : '↓';
+                    }
+                    return '<a href="#" class="sortable" data-column="' . $column . '" data-order="' . $nextOrder . '">' . $label . ' ' . $arrow . '</a>';
+                }
+            @endphp
+            <th>{!! sortLink('ID', 'id', $currentSortColumn, $currentSortOrder) !!}</th>
+            <th>{!! sortLink('商品名', 'product_name', $currentSortColumn, $currentSortOrder) !!}</th>
+            <th>{!! sortLink('価格', 'price', $currentSortColumn, $currentSortOrder) !!}</th>
+            <th>{!! sortLink('在庫', 'stock', $currentSortColumn, $currentSortOrder) !!}</th>
+            <th>{!! sortLink('メーカー', 'company_name', $currentSortColumn, $currentSortOrder) !!}</th>
             <th>画像</th>
             <th>操作</th>
         </tr>
     </thead>
     <tbody>
         @foreach($products as $product)
-        <tr>
+        <tr id="product-row-{{ $product->id }}">
             <td>{{ $product->id }}</td>
             <td>{{ $product->product_name }}</td>
             <td>{{ $product->price }}</td>
@@ -26,14 +41,9 @@
                 @endif
             </td>
             <td>
-                <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm">詳細</a>
+                <a href="{{ route('products.show', $product->id) }}" class="btn btn-info btn-sm">詳細</a>
 
-                <form method="POST" action="{{ route('products.destroy', $product) }}"
-                      style="display:inline;" onsubmit="return confirm('本当に削除しますか？');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm">削除</button>
-                </form>
+                <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $product->id }}">削除</button>
             </td>
         </tr>
         @endforeach
