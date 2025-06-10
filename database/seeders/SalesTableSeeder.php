@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Product; 
 use App\Models\Sale;
+use Illuminate\Support\Facades\DB;
 
 class SalesTableSeeder extends Seeder
 {
@@ -15,6 +17,15 @@ class SalesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        Sale::factory()->count(10)->create();
+        $products = Product::all();
+
+        foreach ($products as $product) {
+            Sale::create([
+                'product_id' => $product->id,
+                'company_id' => $product->company_id,
+                'quantity' => rand(1, 5),
+                'price' => $product->price,
+            ]);
+        }
     }
 }
