@@ -14,24 +14,38 @@ class SaleController extends Controller
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
+            'company_id' => 'required|exists:companies,id',
         ]);
 
-        $product = Product::find($request->product_id);
+        $productId = $request->input('product_id');
+        $quantity = $request->input('quantity');
 
-        if ($product->stock < $request->quantity) {
-            return response()->json(['message' => '在庫が不足しています'], 400);
-        }
+        DB::beginTransaction();
 
-        DB::biginTransaction(function () use ($product, $request) {
-            Sale::create([
-                'product_id' => $product->id,
+        try {
+            $product = Product::lockForUpdate()->find($productId);
+
+            if ($product->stock < $quantity) {
+                DB::rollBack();
+                return response()->json(['message' => '在庫が不足しています'], 400);
+            }
+
+            $product->stock -= $quantity;
+            $product->save();
+
+            Sale::create([           
+                'product_id' => $request->product_id,
                 'quantity' => $request->quantity,
-                'price' => $product->price,
+                'company_id' => $request->company_id,
             ]);
 
-            $product->decrement('stock', $request->quantity);
-        });
+            DB::commit();
 
-        return response()->json(['message' => '購入が完了しました'], 200);
+            return response()->json(['message' => '購入が完了しました'], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => '購入処理中にエラーが発生しました'], 500);
+        }
     }
 }

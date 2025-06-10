@@ -7,16 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
-    protected $fillable = [
-        'product_id' , 'quantity' , 'price' ,
-    ];
-
-
     use HasFactory;
+
+    protected $fillable = [
+        'product_id' , 'quantity' , 'company_id',
+    ];
 
     public function product()
         {
-            return $this->belongsTo(product::class);
+            return $this->belongsTo(Product::class);
+        }
+
+    public function company()
+        {
+            return $this->belongsTo(Company::class);
         }
     
 }
